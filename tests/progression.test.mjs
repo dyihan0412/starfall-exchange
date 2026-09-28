@@ -1,0 +1,26 @@
+import assert from 'node:assert/strict';
+import { createProgression, chooseGuild, addBlessing, settleRun, buildTier, buildMultiplier, buildRouteSummary, blessingRoute, blessings, metaProgressFor } from '../src/progression.mjs';
+
+let progression = createProgression();
+assert.equal(addBlessing(progression, { id: 'DIVIDEND', name: '复配股息' }).ok, false);
+progression = chooseGuild(progression, 'ALCHEMY').progression;
+const blessing = addBlessing(progression, { id: 'DIVIDEND', guild: 'ALCHEMY', name: '复配股息' });
+assert.equal(blessing.ok, true);
+assert.equal(blessing.progression.run.blessings.length, 1);
+const settled = settleRun(blessing.progression, { returnPercent: 0.2, maxDrawdown: 3 });
+assert.ok(settled.gain >= 1);
+assert.equal(settled.progression.run.guildId, null, '轮回后应清除局内构筑');
+assert.equal(settled.progression.renown, settled.gain);
+assert.equal(settled.gain >= 2, true, '完成首轮应至少解锁第一个永久节点');
+assert.equal(metaProgressFor(0).ruleSlots, 1);
+assert.deepEqual(metaProgressFor(5).unlockedStocks, ['moon', 'sky', 'crystal', 'bank', 'forge']);
+assert.equal(metaProgressFor(5).compoundConditions, true);
+assert.equal(metaProgressFor(14).incomeMultiplier, 1.1);
+assert.equal(buildTier(4), 3);
+assert.equal(buildMultiplier(4), 1.35);
+assert.equal(blessingRoute(blessings.ALCHEMY_DIVIDEND), 'INCOME');
+assert.equal(blessingRoute(blessings.ALCHEMY_CALIBRATION), 'FUNDAMENTAL');
+const incomeRoute = buildRouteSummary(['ALCHEMY_DIVIDEND', 'ALCHEMY_RESERVE']).find(route => route.id === 'INCOME');
+assert.equal(incomeRoute.active, true);
+assert.equal(incomeRoute.multiplier, 1.15, '同路线两项词条应形成真实联动倍率');
+console.log('progression tests: passed');

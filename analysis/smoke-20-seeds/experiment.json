@@ -1,0 +1,50 @@
+{
+  "experiment_id": "minimal-hold-smoke-v1",
+  "generated_at": "2026-09-21T21:00:22.653Z",
+  "purpose": "模拟器冒烟测试；20 个种子不用于正式平衡推断。",
+  "formal_rule_modules": [
+    "src/game-config.mjs",
+    "src/daily-inputs.mjs",
+    "src/random.mjs",
+    "src/game-runtime.mjs",
+    "src/market.mjs",
+    "src/portfolio.mjs"
+  ],
+  "analysis_only_conventions": {
+    "day_0": "选择 ALCHEMY、不领取词条，并按策略建仓后；第一次市场推进前的资产快照。",
+    "market_days": "每次正式 advanceRuntimeDay 完成后记录为分析 day=1..12。",
+    "final_day": "day=12 记录正式第 12 日结束后的自动清仓结果；持仓为 0，价格保留最终市场价。",
+    "total_return": "final_worth / start_cash - 1",
+    "drawdown": "max(1 - net_worth / running_peak)，含 day=0。"
+  },
+  "known_issues": [
+    "正式 game-runtime.mjs 当前向 settleRun 传入 maxDrawdown=0；renown_gain 是现行正式结果，不代表分析层回撤已进入声望。",
+    "progression.mjs 的回撤参数单位仍待单独核对。"
+  ],
+  "config": {
+    "market_seeds": {
+      "start": 0,
+      "end": 19,
+      "count": 20
+    },
+    "common_random_numbers": true,
+    "offer_seed_equals_market_seed": true,
+    "start_cash": 400,
+    "renown_start": 0,
+    "guild_id": "ALCHEMY",
+    "blessing_policy": "NONE",
+    "automation_rules": [],
+    "market_days": 12,
+    "strategies": [
+      "cash_control",
+      "moon_hold",
+      "sky_hold",
+      "crystal_hold"
+    ]
+  },
+  "row_counts": {
+    "runs": 80,
+    "days": 1040,
+    "stock_days": 6240
+  }
+}

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>星落交易所</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="incremental.css"><link rel="stylesheet" href="incremental-v2.css"><link rel="stylesheet" href="depth.css"></head>
+<body>
+  <main>
+    <header>
+      <div><p class="eyebrow">STARFALL EXCHANGE · IDLE CAPITAL</p><h1>星落交易所</h1><p class="sub">配置策略，让持仓经营；回来查看你的资本增长。</p></div>
+      <div class="top-actions"><label class="mode">轮回速度<select id="speedMode"><option value="DEV">试玩 · 约 3 分钟</option><option value="NORMAL">标准 · 3 小时</option></select></label><button id="pause">暂停市场</button><button class="quiet" id="reset">重启轮回</button></div>
+    </header>
+
+    <section class="stats">
+      <article><span>市场日</span><b id="day">1 / 12</b><small id="timer">等待开盘</small></article>
+      <article><span>可用现金</span><b id="cash">400.00</b><small>买入时由账本扣除</small></article>
+      <article><span>总资产</span><b id="net">400.00</b><small>现金 + 全部持仓市值</small></article>
+      <article><span>商会声望</span><b id="renown">0</b><small id="status">等待选择商会</small></article>
+    </section>
+
+    <section class="progress-ribbon">
+      <div class="run-growth"><span>本轮资产增长</span><b id="runReturn">+0.00%</b><div class="growth-track"><i id="growthBar"></i></div></div>
+      <div class="day-summary" id="daySummary"><p>市场尚未结算。先选择商会，配置第一笔仓位。</p></div>
+    </section>
+
+    <nav class="workspace-nav" aria-label="游戏系统"><div class="tabs"><button class="tab active" data-tab="marketPanel">市场</button><button class="tab" data-tab="knowledgePanel">情报</button><button class="tab" data-tab="buildPanel">本局构筑</button><button class="tab" data-tab="rulesPanel">自动委托</button><button class="tab" data-tab="ledgerPanel">账本</button></div><button class="mail-button" id="openMailbox">商会信箱 <span id="mailBadge">0</span></button></nav>
+
+    <section class="panel tab-panel" id="marketPanel">
+      <div class="panelhead"><div><p class="eyebrow">THE EXCHANGE</p><h2>配置能持续生产的持仓</h2><p class="sub">价格提供交易机会；经营回款让持仓在等待时继续创造现金。</p></div><div class="panel-tags"><span class="tag" id="accessSummary">个人商贩</span><span class="tag" id="mood">常态交易</span></div></div>
+      <div class="filters"><button class="active" data-filter="ALL">全部 6 支</button><button data-filter="STABLE">稳健</button><button data-filter="GROWTH">成长</button><button data-filter="SPECULATIVE">投机</button></div>
+      <div id="companies" class="companies"></div>
+    </section>
+
+    <section class="panel tab-panel hidden" id="knowledgePanel"><div class="panelhead"><div><p class="eyebrow">HEADQUARTERS & KNOWLEDGE</p><h2>商会总署</h2><p class="sub">声望永久扩大市场权限和自动化能力。</p></div></div><div id="headquarters" class="headquarters"></div><div id="knowledge" class="knowledge"></div><div class="advisor"><p class="eyebrow">LOCAL ADVISOR · READ ONLY</p><h3>市场解读</h3><div id="brief" class="whisper">等待首日结算。</div><small>顾问只能读取市场快照，不能修改现金、持仓或价格。</small></div></section>
+
+    <section class="panel tab-panel hidden" id="buildPanel"><div class="panelhead"><div><p class="eyebrow">RUN BUILD</p><h2>本局构筑</h2><p class="sub" id="guildPlaystyle"></p></div><span class="tag" id="guildName"></span></div><div id="synergy" class="synergy"></div><div id="routes" class="routes"></div><div id="build" class="build-grid"></div></section>
+
+    <section class="panel tab-panel hidden" id="rulesPanel"><div class="panelhead"><div><p class="eyebrow">AUTOMATION</p><h2>挂机策略</h2><p class="sub">每天自动检查并执行。提高声望可增加槽位并解锁组合条件。</p></div><div class="rule-actions"><span id="ruleCapacity"></span><button class="quiet" id="addRule">+ 添加委托</button></div></div><div id="rules" class="rules-list"></div></section>
+
+    <section class="panel tab-panel hidden" id="ledgerPanel"><div class="panelhead"><div><p class="eyebrow">LEDGER</p><h2>真实账本</h2><p class="sub">每一笔买卖、返利和词条收益都可追溯。</p></div></div><div id="log" class="ledger-list"></div></section>
+  </main>
+
+  <div class="modal hidden" id="guildModal"><div class="modalcard"><p class="eyebrow">市场已暂停</p><h2>本轮想怎样赚钱？</h2><p>商会决定词条方向，不限制你交易其他股票。下一轮可以重新选择。</p><div class="guilds" id="guilds"></div></div></div>
+  <div class="modal hidden" id="mailModal"><div class="modalcard wide"><button class="close" data-close="mailModal">×</button><p class="eyebrow">GUILD MAILBOX · 市场不会暂停</p><h2>关键节点二选一</h2><p>第 1、4、7、10 日各送达一封信。旧邮件会保留，不需要持续盯盘。</p><div id="mailbox" class="mailbox"></div></div></div>
+  <div class="modal hidden" id="detailModal"><div class="modalcard"><button class="close" data-close="detailModal">×</button><div id="detail"></div></div></div>
+  <div class="modal hidden" id="reportModal"><div class="modalcard report"><p class="eyebrow">轮回完成 · 持仓已清仓</p><h2>本轮增长</h2><div id="report"></div><button id="nextRun">把现金带入下一轮</button></div></div>
+  <div id="gainBurst" class="gain-burst hidden"></div><div id="milestone" class="milestone hidden"></div><div id="toast" class="toast hidden"></div>
+  <script type="module" src="app.mjs"></script>
+</body>
+</html>
